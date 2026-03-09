@@ -566,5 +566,285 @@
     "category": "Other",
     "jiggler_suspected": false,
     "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:22:51",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": true,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:23:41",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:23:56",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": true,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:24:07",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:24:12",
+    "process": "brave.exe",
+    "title": "jefrinmsa/AI-behavior-pattern-detection - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:24:32",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:24:52",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": true
+  },
+  {
+    "timestamp": "2026-03-09 22:24:57",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:25:02",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": true,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:25:47",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:26:02",
+    "process": "brave.exe",
+    "title": "jefrinmsa/AI-behavior-pattern-detection - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:26:32",
+    "process": "explorer.exe",
+    "title": "This PC - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:26:37",
+    "process": "explorer.exe",
+    "title": "Desktop - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:26:47",
+    "process": "explorer.exe",
+    "title": "This PC - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:26:52",
+    "process": "explorer.exe",
+    "title": "Windows (C:) - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:26:57",
+    "process": "explorer.exe",
+    "title": "hp - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:07",
+    "process": "explorer.exe",
+    "title": "bridge - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:12",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:17",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": true,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:22",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:27",
+    "process": "explorer.exe",
+    "title": "bridge - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:47",
+    "process": "explorer.exe",
+    "title": "employeeactivitytracker - File Explorer",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:27:57",
+    "process": "brave.exe",
+    "title": "jefrinmsa/AI-behavior-pattern-detection - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:07",
+    "process": "windowsterminal.exe",
+    "title": "C:\\Windows\\System32\\cmd.exe - git  push -u origin main",
+    "category": "Terminal",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:12",
+    "process": "windowsterminal.exe",
+    "title": "C:\\Windows\\System32\\cmd.exe",
+    "category": "Terminal",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:22",
+    "process": "brave.exe",
+    "title": "jefrinmsa/AI-behavior-pattern-detection - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:28",
+    "process": "brave.exe",
+    "title": "Push folder to Git - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:33",
+    "process": "explorer.exe",
+    "title": "",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:38",
+    "process": "windowsterminal.exe",
+    "title": "C:\\Windows\\System32\\cmd.exe",
+    "category": "Terminal",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:43",
+    "process": "code.exe",
+    "title": "Welcome - New folder - Visual Studio Code",
+    "category": "Coding",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:48",
+    "process": "brave.exe",
+    "title": "Push folder to Git - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:53",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - test_spam.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:28:58",
+    "process": "antigravity.exe",
+    "title": "employeeactivitytracker - Antigravity - tracker.py",
+    "category": "Other",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:29:08",
+    "process": "brave.exe",
+    "title": "Push folder to Git - Brave",
+    "category": "Browsing (Uncategorized)",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
+  },
+  {
+    "timestamp": "2026-03-09 22:29:23",
+    "process": "windowsterminal.exe",
+    "title": "C:\\Windows\\System32\\cmd.exe",
+    "category": "Terminal",
+    "jiggler_suspected": false,
+    "key_spam_suspected": false
   }
 ]
