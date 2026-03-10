@@ -3,7 +3,9 @@ import os
 import sys
 import glob
 from datetime import datetime
+from db import get_db
 
+mongo_db = get_db()
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 
 def get_employee_details():
@@ -16,28 +18,15 @@ def get_employee_details():
             print("Employee ID is required.")
             sys.exit(1)
             
-    emp_file = os.path.join(LOG_DIR, "employees.json")
     emp_name = "Employee"
-    if os.path.exists(emp_file):
-        try:
-            with open(emp_file, "r") as f:
-                workers = json.load(f)
-            if emp_id in workers:
-                emp_name = workers[emp_id].get("name", emp_id)
-        except Exception:
-            pass
+    emp = mongo_db.employees.find_one({"emp_id": emp_id}, {"_id": 0})
+    if emp:
+        emp_name = emp.get("name", emp_id)
             
     return emp_id, emp_name
 
 def load_burnout_report(emp_id, date_str):
-    filepath = os.path.join(LOG_DIR, f"burnout_{emp_id}_{date_str}.json")
-    if not os.path.exists(filepath):
-        return None
-    try:
-        with open(filepath, "r") as f:
-            return json.load(f)
-    except Exception:
-        return None
+    return mongo_db.burnout.find_one({"emp_id": emp_id, "date": date_str}, {"_id": 0})
 
 def trigger_manager_alert(report, emp_id, emp_name, date_str):
     score = report.get("risk_score", 0)
@@ -79,8 +68,11 @@ def trigger_manager_alert(report, emp_id, emp_name, date_str):
         "risk_score": score,
         "observations": obs
     }
-    with open(os.path.join(LOG_DIR, f"manager_alert_{emp_id}_{date_str}.json"), "w") as f:
-        json.dump(out_dict, f, indent=2)
+    mongo_db.manager_alerts.replace_one(
+        {"emp_id": emp_id, "date": date_str},
+        out_dict,
+        upsert=True
+    )
 
 def trigger_employee_nudge(report, emp_id, emp_name, date_str):
     score = report.get("risk_score", 0)
@@ -145,8 +137,11 @@ def trigger_employee_nudge(report, emp_id, emp_name, date_str):
         "checkin_choice": choice,
         "bot_response": response_text
     }
-    with open(os.path.join(LOG_DIR, f"employee_checkin_{emp_id}_{date_str}.json"), "w") as f:
-        json.dump(out_dict, f, indent=2)
+    mongo_db.employee_checkins.replace_one(
+        {"emp_id": emp_id, "date": date_str},
+        out_dict,
+        upsert=True
+    )
 
 def trigger_scrum_warning(report, emp_id, emp_name, date_str):
     score = report.get("risk_score", 0)
@@ -158,20 +153,12 @@ def trigger_scrum_warning(report, emp_id, emp_name, date_str):
     pending_goals = 0
     estimated_mins = 0
     
-    if os.path.exists(goals_path):
-        try:
-            with open(goals_path, "r") as f:
-                goals = json.load(f)
-            for g in goals:
-                if str(g.get("status")).lower() != "completed":
-                    pending_goals += 1
-                    # Estimate based on time taken previously or arbitrary assignment 
-                    # Use provided estimate mapping or assume 2.5 hours average per goal if missing
-                    # Standard assumption: time_taken_min holds actual, estimate is needed
-                    e = g.get("estimated_min", 150) 
-                    estimated_mins += e
-        except Exception:
-            pass
+    goals = list(mongo_db.goals.find({"emp_id": emp_id, "date": date_str}, {"_id": 0}))
+    for g in goals:
+        if str(g.get("status")).lower() != "completed":
+            pending_goals += 1
+            e = g.get("estimated_min", 150)
+            estimated_mins += e
             
     hours_left = round(estimated_mins / 60.0, 1)
     if pending_goals == 0:
@@ -203,29 +190,25 @@ def trigger_scrum_warning(report, emp_id, emp_name, date_str):
         "pending_goals": pending_goals,
         "estimated_hours": hours_left
     }
-    with open(os.path.join(LOG_DIR, f"scrum_warning_{emp_id}_{date_str}.json"), "w") as f:
-        json.dump(out_dict, f, indent=2)
+    mongo_db.scrum_warnings.replace_one(
+        {"emp_id": emp_id, "date": date_str},
+        out_dict,
+        upsert=True
+    )
 
 def process_recovery_tracking(emp_id, emp_name, today_report, date_str):
-    # Needs historical burnout files
-    pattern = os.path.join(LOG_DIR, f"burnout_{emp_id}_*.json")
-    files = glob.glob(pattern)
+    # Needs historical burnout data
+    burnout_history = list(mongo_db.burnout.find({"emp_id": emp_id}, {"_id": 0}))
     
-    if not files:
+    if not burnout_history:
         return
         
     scores_dict = {}
-    
-    for fp in files:
-        try:
-            with open(fp, "r") as f:
-                data = json.load(f)
-                d = data.get("date")
-                s = data.get("risk_score")
-                if d and s is not None:
-                    scores_dict[d] = s
-        except Exception:
-            pass
+    for data in burnout_history:
+        d = data.get("date")
+        s = data.get("risk_score")
+        if d and s is not None:
+            scores_dict[d] = s
             
     if not scores_dict:
         return
@@ -233,17 +216,9 @@ def process_recovery_tracking(emp_id, emp_name, today_report, date_str):
     sorted_dates = sorted(scores_dict.keys())
     historical_scores = [{"date": d, "score": scores_dict[d]} for d in sorted_dates]
     
-    rec_path = os.path.join(LOG_DIR, f"recovery_{emp_id}.json")
-    
     # Do we have an active tracking session?
-    tracker = None
-    if os.path.exists(rec_path):
-        try:
-            with open(rec_path, "r") as f:
-                tracker = json.load(f)
-        except Exception:
-            tracker = None
-            
+    tracker = mongo_db.recovery.find_one({"emp_id": emp_id}, {"_id": 0})
+    
     current_score = today_report.get("risk_score", 0)
             
     # If no tracker and highly burnt out, initialize it
@@ -253,33 +228,30 @@ def process_recovery_tracking(emp_id, emp_name, today_report, date_str):
                 "emp_id": emp_id,
                 "burnout_detected_date": date_str,
                 "initial_score": current_score,
-                "daily_scores": historical_scores[-7:], # Seed with recent path
+                "daily_scores": historical_scores[-7:],
                 "status": "stagnant",
                 "recovered": False
             }
         else:
-            return # No active recovery needed yet
+            return
             
     # Update tracker
-    tracker["daily_scores"] = historical_scores[-7:] # Maintain trailing 7 days
+    tracker["daily_scores"] = historical_scores[-7:]
     
     initial = tracker.get("initial_score", current_score)
-    is_recovering = False
     
     if current_score <= initial - 20: 
-        print(f"\n✅ Recovery Update — {emp_name}")
+        print(f"\nRecovery Update - {emp_name}")
         print(f" Risk score dropped from {initial} to {current_score}.")
         print(" Employee appears to be recovering well.")
         print(" Continue current support approach.\n")
         tracker["status"] = "recovering"
-        is_recovering = True
         
         if current_score <= 30:
             tracker["status"] = "recovered"
             tracker["recovered"] = True
             
     else:
-        # Check if 7 days stagnant
         start_date_str = tracker["burnout_detected_date"]
         try:
             start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
@@ -287,7 +259,7 @@ def process_recovery_tracking(emp_id, emp_name, today_report, date_str):
             days_passed = (today - start_date).days
             
             if days_passed >= 7 and current_score > 70:
-                print(f"\n⚠️  No Recovery Detected — {emp_name}")
+                print(f"\nNo Recovery Detected - {emp_name}")
                 print(" Risk score has stayed above 70 for 7 days.")
                 print(" Stronger intervention may be needed.")
                 print(" Consider HR involvement.\n")
@@ -295,9 +267,12 @@ def process_recovery_tracking(emp_id, emp_name, today_report, date_str):
         except Exception:
             pass
             
-    # Flush back to disk
-    with open(rec_path, "w") as f:
-        json.dump(tracker, f, indent=2)
+    # Flush back to MongoDB
+    mongo_db.recovery.replace_one(
+        {"emp_id": emp_id},
+        tracker,
+        upsert=True
+    )
 
 def main():
     emp_id, emp_name = get_employee_details()

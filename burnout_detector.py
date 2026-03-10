@@ -3,6 +3,9 @@ import os
 import sys
 import glob
 from datetime import datetime
+from db import get_db
+
+mongo_db = get_db()
 
 try:
     from sklearn.ensemble import IsolationForest
@@ -18,46 +21,28 @@ def get_employee_id():
     if len(sys.argv) > 1:
         return sys.argv[1]
     
-    emp_file = os.path.join(LOG_DIR, "employees.json")
-    if not os.path.exists(emp_file):
-        choice = input("\nNo employees.json found. Please manually enter an employee ID: ").strip()
+    emps = list(mongo_db.employees.find({}, {"_id": 0}))
+    if not emps:
+        choice = input("\nNo employees found. Please manually enter an employee ID: ").strip()
         if not choice:
             print("Employee ID is required.")
             sys.exit(1)
         return choice
         
-    with open(emp_file, "r") as f:
-        employees = json.load(f)
-        
-    if not employees:
-        print("No employees registered yet.")
-        sys.exit(1)
-        
     print("\nAvailable Employees:")
-    for emp_id, emp in employees.items():
-        print(f"  {emp_id} -> {emp['name']}")
+    for emp in emps:
+        print(f"  {emp['emp_id']} -> {emp['name']}")
         
     choice = input("\nEnter employee ID to check for burnout: ").strip()
-    if choice not in employees:
+    found = any(e["emp_id"] == choice for e in emps)
+    if not found:
         print("Invalid employee ID.")
         sys.exit(1)
         
     return choice
 
 def load_reports():
-    reports = []
-    # Note: Currently reports are just report_YYYY-MM-DD.json 
-    # If they were per-employee we would filter by emp_id.
-    pattern = os.path.join(LOG_DIR, "report_*.json")
-    for file_path in glob.glob(pattern):
-        try:
-            with open(file_path, "r") as f:
-                data = json.load(f)
-                reports.append(data)
-        except Exception:
-            pass
-            
-    # Sort chronologically by date
+    reports = list(mongo_db.reports.find({}, {"_id": 0}))
     reports.sort(key=lambda x: x.get("date", ""))
     return reports
 
@@ -347,9 +332,11 @@ def run_burnout_check(emp_id):
       "ai_layer_active": ai_active
     }
     
-    out_path = os.path.join(LOG_DIR, f"burnout_{emp_id}_{today}.json")
-    with open(out_path, "w") as f:
-        json.dump(output_dict, f, indent=2)
+    mongo_db.burnout.replace_one(
+        {"emp_id": emp_id, "date": today},
+        output_dict,
+        upsert=True
+    )
 
 if __name__ == "__main__":
     emp = get_employee_id()

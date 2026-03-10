@@ -1,7 +1,9 @@
 import json
 import os
 from datetime import datetime
+from db import get_db
 
+mongo_db = get_db()
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
@@ -10,17 +12,15 @@ os.makedirs(LOG_DIR, exist_ok=True)
 #  In real app this would be a database
 #  For hackathon demo we use a simple JSON file
 # ─────────────────────────────────────────────
-EMPLOYEES_FILE = os.path.join(LOG_DIR, "employees.json")
+EMPLOYEES_FILE = os.path.join(LOG_DIR, "employees.json")  # kept for reference only
 
 def load_employees():
-    if not os.path.exists(EMPLOYEES_FILE):
-        return {}
-    with open(EMPLOYEES_FILE, "r") as f:
-        return json.load(f)
+    emps = list(mongo_db.employees.find({}, {"_id": 0}))
+    return {e["emp_id"]: e for e in emps}
 
 def save_employees(employees):
-    with open(EMPLOYEES_FILE, "w") as f:
-        json.dump(employees, f, indent=2)
+    # Not needed anymore — individual inserts/updates are used
+    pass
 
 def add_employee(name):
     employees = load_employees()
@@ -28,13 +28,12 @@ def add_employee(name):
     if any(e["name"].lower() == name.lower() for e in employees.values()):
         print(f"  [!] Employee '{name}' already exists.")
         return
-    employees[emp_id] = {
-        "id": emp_id,
+    mongo_db.employees.insert_one({
+        "emp_id": emp_id,
         "name": name,
         "joined": datetime.now().strftime("%Y-%m-%d"),
-    }
-    save_employees(employees)
-    print(f"  ✅ Employee added: {name} (ID: {emp_id})")
+    })
+    print(f"  Employee added: {name} (ID: {emp_id})")
 
 def list_employees():
     employees = load_employees()
@@ -44,7 +43,7 @@ def list_employees():
     print("\n  Registered Employees:")
     print("  " + "-" * 35)
     for emp_id, emp in employees.items():
-        print(f"  {emp_id}  →  {emp['name']}")
+        print(f"  {emp_id}  ->  {emp['name']}")
     print()
     return employees
 
@@ -54,19 +53,21 @@ def list_employees():
 def goals_file(emp_id, date_str=None):
     if date_str is None:
         date_str = datetime.now().strftime("%Y-%m-%d")
-    return os.path.join(LOG_DIR, f"goals_{emp_id}_{date_str}.json")
+    return (emp_id, date_str)
 
 def load_goals(emp_id, date_str=None):
-    path = goals_file(emp_id, date_str)
-    if not os.path.exists(path):
-        return []
-    with open(path, "r") as f:
-        return json.load(f)
+    if date_str is None:
+        date_str = datetime.now().strftime("%Y-%m-%d")
+    return list(mongo_db.goals.find({"emp_id": emp_id, "date": date_str}, {"_id": 0}))
 
 def save_goals(emp_id, goals, date_str=None):
-    path = goals_file(emp_id, date_str)
-    with open(path, "w") as f:
-        json.dump(goals, f, indent=2)
+    if date_str is None:
+        date_str = datetime.now().strftime("%Y-%m-%d")
+    mongo_db.goals.delete_many({"emp_id": emp_id, "date": date_str})
+    for g in goals:
+        g["emp_id"] = emp_id
+        g["date"] = date_str
+        mongo_db.goals.insert_one(g)
 
 # ─────────────────────────────────────────────
 #  ASSIGN GOAL TO EMPLOYEE

@@ -3,18 +3,21 @@ import os
 import glob
 from datetime import datetime, timedelta
 from collections import defaultdict
+from db import get_db
 
+mongo_db = get_db()
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 
 # ─────────────────────────────────────────────
 #  LOAD LOG
 # ─────────────────────────────────────────────
 def load_log(date_str=None):
-    """Load log for a given date (default: today)."""
+    """Load log for a given date (default: today) from MongoDB."""
     if date_str is None:
         date_str = datetime.now().strftime("%Y-%m-%d")
-    log_file = os.path.join(LOG_DIR, f"activity_{date_str}.json")
-    if not os.path.exists(log_file):
+    
+    entries = list(mongo_db.activities.find({"date": date_str}, {"_id": 0}))
+    if not entries:
         print(f"[!] No log found for {date_str}")
         return []
         
@@ -23,9 +26,6 @@ def load_log(date_str=None):
     sys.path.append(os.path.dirname(__file__))
     from tracker import APP_CATEGORIES
     
-    with open(log_file, "r") as f:
-        entries = json.load(f)
-        
     for e in entries:
         if e.get("category") == "Other":
             e["category"] = APP_CATEGORIES.get(e.get("process"), "Neutral")
@@ -33,21 +33,12 @@ def load_log(date_str=None):
     return entries
 
 def load_breaks(date_str):
-    """Load break log for a given date."""
-    log_file = os.path.join(LOG_DIR, f"breaks_{date_str}.json")
-    if not os.path.exists(log_file):
-        return []
-    with open(log_file, "r") as f:
-        return json.load(f)
+    """Load break log for a given date from MongoDB."""
+    return list(mongo_db.breaks.find({"date": date_str}, {"_id": 0}))
 
 def load_all_goals(date_str):
-    """Load and combine all goals for all employees on a given date."""
-    goals = []
-    pattern = os.path.join(LOG_DIR, f"goals_*_{date_str}.json")
-    for file_path in glob.glob(pattern):
-        with open(file_path, "r") as f:
-            goals.extend(json.load(f))
-    return goals
+    """Load all goals for all employees on a given date from MongoDB."""
+    return list(mongo_db.goals.find({"date": date_str}, {"_id": 0}))
 
 # ─────────────────────────────────────────────
 #  CALCULATE TIME SPENT PER ENTRY
@@ -320,10 +311,12 @@ def print_report(date_str=None):
             "exceeded": total_break_mins > limit_mins
         }
     }
-    report_path = os.path.join(LOG_DIR, f"report_{date_str}.json")
-    with open(report_path, "w") as f:
-        json.dump(report, f, indent=2)
-    print(f"  💾 Report saved to: {report_path}\n")
+    mongo_db.reports.replace_one(
+        {"date": date_str},
+        report,
+        upsert=True
+    )
+    print(f"  Report saved to MongoDB (reports collection)\n")
 
     return report
 

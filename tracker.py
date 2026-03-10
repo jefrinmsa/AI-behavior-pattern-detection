@@ -11,6 +11,9 @@ import keyboard
 import uiautomation as auto
 from urllib.parse import urlparse
 from datetime import datetime
+from db import get_db
+
+mongo_db = get_db()
 
 # ─────────────────────────────────────────────
 #  CATEGORY MAPPING
@@ -191,32 +194,25 @@ def detect_keyboard_spammer(history, threshold=20):
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE = os.path.join(LOG_DIR, f"activity_{datetime.now().strftime('%Y-%m-%d')}.json")
 
 # ─────────────────────────────────────────────
 #  BREAK LOGGING
 # ─────────────────────────────────────────────
 BREAK_LIMIT_MINUTES = 90
-BREAK_LOG_FILE = os.path.join(LOG_DIR, f"breaks_{datetime.now().strftime('%Y-%m-%d')}.json")
 
 is_on_break = False
 break_start_time = None
 
 def load_todays_breaks():
-    if not os.path.exists(BREAK_LOG_FILE):
-        return []
-    try:
-        with open(BREAK_LOG_FILE, "r") as f:
-            return json.load(f)
-    except Exception:
-        return []
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    return list(mongo_db.breaks.find({"date": date_str}, {"_id": 0}))
 
 breaks_today = load_todays_breaks()
 
 def save_break(entry):
+    entry["date"] = datetime.now().strftime('%Y-%m-%d')
     breaks_today.append(entry)
-    with open(BREAK_LOG_FILE, "w") as f:
-        json.dump(breaks_today, f, indent=2)
+    mongo_db.breaks.insert_one(entry)
 
 def get_used_break_minutes():
     return sum(b.get("duration_min", 0) for b in breaks_today)
@@ -359,8 +355,11 @@ def classify(hwnd, proc_name, title):
     return category, url
 
 def save_log():
-    with open(LOG_FILE, "w") as f:
-        json.dump(session_log, f, indent=2)
+    """Insert the latest activity entry into MongoDB."""
+    if session_log:
+        entry = session_log[-1].copy()
+        entry["date"] = datetime.now().strftime('%Y-%m-%d')
+        mongo_db.activities.insert_one(entry)
 
 def run_tracker(poll_interval=5):
     global last_entry
@@ -373,15 +372,20 @@ def run_tracker(poll_interval=5):
     print("=" * 55)
 
     while True:
-        if is_on_break:
-            duration_sec = (datetime.now() - break_start_time).total_seconds()
-            h = int(duration_sec // 3600)
-            m = int((duration_sec % 3600) // 60)
-            s = int(duration_sec % 60)
-            # Live timer without newline
-            sys.stdout.write(f"\rOn break... {h:02d}:{m:02d}:{s:02d}      ")
+        # --- BREAK STATE CHECK (MongoDB boolean) ---
+        external_break = False
+        try:
+            state = mongo_db.break_state.find_one({"_id": "current"})
+            if state:
+                external_break = state.get("on_break", False)
+        except Exception:
+            pass
+            
+        if is_on_break or external_break:
+            sys.stdout.write(f"\r[PAUSED] Tracker suspended — on break...       ")
             sys.stdout.flush()
             time.sleep(1)
+            last_entry = None
             continue
             
         hwnd, proc_name, title = get_active_window()
@@ -444,4 +448,4 @@ if __name__ == "__main__":
         run_tracker(poll_interval=5)
     except KeyboardInterrupt:
         print_daily_break_summary()
-        print("\nTracker stopped. Log saved to:", LOG_FILE)
+        print("\nTracker stopped. Log saved to MongoDB.")

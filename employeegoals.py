@@ -1,7 +1,9 @@
 import json
 import os
 from datetime import datetime
+from db import get_db
 
+mongo_db = get_db()
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
@@ -11,25 +13,24 @@ os.makedirs(LOG_DIR, exist_ok=True)
 def goals_file(emp_id, date_str=None):
     if date_str is None:
         date_str = datetime.now().strftime("%Y-%m-%d")
-    return os.path.join(LOG_DIR, f"goals_{emp_id}_{date_str}.json")
+    return (emp_id, date_str)
 
 def load_goals(emp_id):
-    path = goals_file(emp_id)
-    if not os.path.exists(path):
-        return []
-    with open(path, "r") as f:
-        return json.load(f)
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    return list(mongo_db.goals.find({"emp_id": emp_id, "date": date_str}, {"_id": 0}))
 
 def save_goals(emp_id, goals):
-    with open(goals_file(emp_id), "w") as f:
-        json.dump(goals, f, indent=2)
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    # Delete existing goals for this employee/date and re-insert
+    mongo_db.goals.delete_many({"emp_id": emp_id, "date": date_str})
+    for g in goals:
+        g["emp_id"] = emp_id
+        g["date"] = date_str
+        mongo_db.goals.insert_one(g)
 
 def load_employees():
-    emp_file = os.path.join(LOG_DIR, "employees.json")
-    if not os.path.exists(emp_file):
-        return {}
-    with open(emp_file, "r") as f:
-        return json.load(f)
+    emps = list(mongo_db.employees.find({}, {"_id": 0}))
+    return {e["emp_id"]: e for e in emps}
 
 # ─────────────────────────────────────────────
 #  FORMAT TIME
@@ -148,9 +149,11 @@ def check_sprint_complete(emp_id, emp_name, goals):
             "total_goals": len(active),
             "message": "All sprint goals completed. Remaining time is free time."
         }
-        summary_path = os.path.join(LOG_DIR, f"sprint_summary_{emp_id}_{now.strftime('%Y-%m-%d')}.json")
-        with open(summary_path, "w") as f:
-            json.dump(summary, f, indent=2)
+        mongo_db.sprint_summaries.replace_one(
+            {"emp_id": emp_id, "date": now.strftime("%Y-%m-%d")},
+            summary,
+            upsert=True
+        )
 
 # ─────────────────────────────────────────────
 #  LOGIN — Employee identifies themselves

@@ -28,5 +28,147 @@
     "start_time": "2026-03-10 10:59:44",
     "end_time": "2026-03-10 10:59:53",
     "duration_min": 0.1
+  },
+  {
+    "break_number": 6,
+    "start_time": "15:36",
+    "exceeded_limit": false,
+    "end_time": "15:36",
+    "duration_min": 0
+  },
+  {
+    "break_number": 7,
+    "start_time": "20:05",
+    "exceeded_limit": false,
+    "end_time": "20:05",
+    "duration_min": 0
+  },
+  {
+    "break_number": 8,
+    "start_time": "20:52",
+    "exceeded_limit": false,
+    "end_time": "20:52",
+    "duration_min": 0
+  },
+  {
+    "break_number": 9,
+    "start_time": "22:13",
+    "exceeded_limit": false,
+    "end_time": "22:13",
+    "duration_min": 0
+  },
+  {
+    "break_number": 10,
+    "start_time": "22:25",
+    "exceeded_limit": false,
+    "end_time": "22:26",
+    "duration_min": 1
+  },
+  {
+    "break_number": 11,
+    "start_time": "22:49",
+    "exceeded_limit": false,
+    "end_time": "23:29",
+    "duration_min": 40
+  },
+  {
+    "break_number": 12,
+    "start_time": "23:10",
+    "exceeded_limit": false,
+    "end_time": "23:13",
+    "duration_min": 3
+  },
+  {
+    "break_number": 13,
+    "start_time": "23:15",
+    "exceeded_limit": false,
+    "end_time": "23:15",
+    "duration_min": 0
+  },
+  {
+    "break_number": 14,
+    "start_time": "23:15",
+    "exceeded_limit": false,
+    "end_time": "23:15",
+    "duration_min": 0
+  },
+  {
+    "break_number": 15,
+    "start_time": "23:29",
+    "exceeded_limit": false,
+    "end_time": "23:30",
+    "duration_min": 1
+  },
+  {
+    "break_number": 16,
+    "start_time": "23:30",
+    "exceeded_limit": false,
+    "end_time": "23:30",
+    "duration_min": 0
+  },
+  {
+    "break_number": 17,
+    "start_time": "23:30",
+    "exceeded_limit": false,
+    "end_time": "23:30",
+    "duration_min": 0
+  },
+  {
+    "break_number": 18,
+    "start_time": "23:35:28",
+    "end_time": "23:35:46",
+    "duration_min": 0.3
+  },
+  {
+    "break_number": 19,
+    "start_time": "23:36:28",
+    "end_time": "23:36:35",
+    "duration_min": 0.1
+  },
+  {
+    "break_number": 20,
+    "start_time": "23:36:39",
+    "end_time": "23:36:39",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 21,
+    "start_time": "23:36:40",
+    "end_time": "23:36:40",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 22,
+    "start_time": "23:36:41",
+    "end_time": "23:36:41",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 23,
+    "start_time": "23:36:42",
+    "end_time": "23:36:43",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 24,
+    "start_time": "23:36:42",
+    "end_time": "23:36:43",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 25,
+    "start_time": "23:36:43",
+    "end_time": "23:36:44",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 26,
+    "start_time": "23:36:43",
+    "end_time": "23:36:44",
+    "duration_min": 0.0
+  },
+  {
+    "break_number": 27,
+    "start_time": "23:36:44"
   }
 ]

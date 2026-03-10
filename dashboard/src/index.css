@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-darkBg: #05050A; /* Deeper black for higher contrast */
+  --color-electricBlue: #00F0FF; /* Cyberpunk neon blue instead of corporate blue */
+  --color-purpleAccent: #B500FF; /* Cyberpunk neon purple */
+  --color-successGreen: #00FF66; /* Neon green */
+  --color-warningOrange: #FFB300; 
+  --color-dangerRed: #FF0055; /* Neon pink/red */
+  --color-glassBg: rgba(20, 20, 35, 0.4);
+  --color-glassBorder: rgba(255, 255, 255, 0.08);
+  
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --animate-pulse-fast: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@layer base {
+  body {
+    @apply bg-darkBg text-white font-body min-h-screen overflow-x-hidden;
+    /* subtle noise texture for premium feel */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-glassBg backdrop-blur-xl border border-glassBorder rounded-3xl p-6 transition-all duration-500 relative overflow-hidden;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  }
+  
+  .glass-card::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity duration-500 pointer-events-none;
+  }
+  
+  .glass-card:hover::before {
+    @apply opacity-100;
+  }
+  
+  .glass-card:hover {
+    @apply -translate-y-2 border-white/20;
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 240, 255, 0.05);
+  }
+  
+  .glass-button {
+    @apply relative flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all duration-300 transform active:scale-95 overflow-hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  
+  .glass-button::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] transition-transform duration-700 ease-in-out;
+  }
+  
+  .glass-button:hover::after {
+    @apply translate-x-[150%];
+  }
+  .glass-button:hover {
+    @apply border-white/30;
+  }
+
+  /* Extreme Neon Glow Variants */
+  .text-glow-blue { text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 240, 255, 0.4); }
+  .text-glow-green { text-shadow: 0 0 10px rgba(0, 255, 102, 0.8), 0 0 20px rgba(0, 255, 102, 0.4); }
+  .text-glow-red { text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4); }
+  .text-glow-orange { text-shadow: 0 0 10px rgba(255, 179, 0, 0.8), 0 0 20px rgba(255, 179, 0, 0.4); }
+  .text-glow-purple { text-shadow: 0 0 10px rgba(181, 0, 255, 0.8), 0 0 20px rgba(181, 0, 255, 0.4); }
+
+  .shadow-glow-blue { box-shadow: 0 0 40px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(0, 240, 255, 0.1); border-color: rgba(0, 240, 255, 0.5); }
+  .shadow-glow-red { box-shadow: 0 0 40px rgba(255, 0, 85, 0.5), inset 0 0 20px rgba(255, 0, 85, 0.1); border-color: rgba(255, 0, 85, 0.5); }
+  .shadow-glow-orange { box-shadow: 0 0 40px rgba(255, 179, 0, 0.4), inset 0 0 20px rgba(255, 179, 0, 0.1); border-color: rgba(255, 179, 0, 0.5); }
+  .shadow-glow-green { box-shadow: 0 0 40px rgba(0, 255, 102, 0.4), inset 0 0 20px rgba(0, 255, 102, 0.1); border-color: rgba(0, 255, 102, 0.5); }
+  .shadow-glow-purple { box-shadow: 0 0 40px rgba(181, 0, 255, 0.4), inset 0 0 20px rgba(181, 0, 255, 0.1); border-color: rgba(181, 0, 255, 0.5); }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white/20 rounded-full;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/40;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
