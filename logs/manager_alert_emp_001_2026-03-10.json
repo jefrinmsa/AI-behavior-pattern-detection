@@ -1,0 +1,12 @@
+{
+  "type": "manager_private_alert",
+  "emp_id": "emp_001",
+  "date": "2026-03-10",
+  "risk_score": 80,
+  "observations": [
+    "Employee worked 10+ hours for 3 or more days",
+    "Break time dropped to under 30 mins/day for 3+ days",
+    "Goal completion score below 50% for 3+ days",
+    "AI Anomaly detected in today's behavior pattern against historical baseline"
+  ]
+}

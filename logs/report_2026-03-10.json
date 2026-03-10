@@ -1,0 +1,66 @@
+{
+  "date": "2026-03-10",
+  "productivity_score": 21.0,
+  "score_breakdown": {
+    "final": 21.0,
+    "activity": 22.1,
+    "goal": 0,
+    "break": 100
+  },
+  "productive_sec": 7447.0,
+  "unproductive_sec": 0,
+  "category_breakdown": {
+    "Productivity": 6645.0,
+    "Terminal": 10.0,
+    "Browsing (Uncategorized)": 1416.0,
+    "Neutral": 24853.0,
+    "Coding": 792.0
+  },
+  "hourly_timeline": {
+    "2026-03-10 01": {
+      "Productivity": 1472.0,
+      "Terminal": 10.0,
+      "Browsing (Uncategorized)": 253.0,
+      "Neutral": 932.0
+    },
+    "2026-03-10 02": {
+      "Neutral": 13125.0
+    },
+    "2026-03-10 05": {
+      "Neutral": 7759.0
+    },
+    "2026-03-10 07": {
+      "Neutral": 66.0,
+      "Coding": 715.0,
+      "Browsing (Uncategorized)": 5.0
+    },
+    "2026-03-10 08": {
+      "Coding": 77.0,
+      "Neutral": 1223.0,
+      "Browsing (Uncategorized)": 843.0,
+      "Productivity": 1303.0
+    },
+    "2026-03-10 09": {
+      "Browsing (Uncategorized)": 305.0,
+      "Neutral": 1671.0,
+      "Productivity": 2657.0
+    },
+    "2026-03-10 10": {
+      "Productivity": 1213.0,
+      "Neutral": 77.0,
+      "Browsing (Uncategorized)": 10.0
+    }
+  },
+  "suspicious_flags": [
+    "\u26a0\ufe0f  Same window open for 3h 54m with no switch: ''",
+    "\u26a0\ufe0f  Same window open for 2h 9m with no switch: ''",
+    "\u26a0\ufe0f  Mouse jiggler suspected \u2014 robotic movement detected 178 times"
+  ],
+  "jiggler_detected": true,
+  "break_summary": {
+    "total_breaks": 4,
+    "total_break_min": 1.6,
+    "limit_min": 90,
+    "exceeded": false
+  }
+}

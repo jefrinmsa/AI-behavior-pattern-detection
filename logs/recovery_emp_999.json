@@ -1,0 +1,13 @@
+{
+  "emp_id": "emp_999",
+  "burnout_detected_date": "2026-03-10",
+  "initial_score": 85,
+  "daily_scores": [
+    {
+      "date": "2026-03-10",
+      "score": 80
+    }
+  ],
+  "status": "stagnant",
+  "recovered": false
+}

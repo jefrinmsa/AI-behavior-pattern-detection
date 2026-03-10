@@ -1,0 +1,39 @@
+{
+  "date": "2026-03-09",
+  "productivity_score": 75.6,
+  "productive_sec": 4864.0,
+  "unproductive_sec": 5.0,
+  "category_breakdown": {
+    "Productivity": 4672.0,
+    "Browsing (Uncategorized)": 1088.0,
+    "Social": 5.0,
+    "Coding": 31.0,
+    "Neutral": 475.0,
+    "Terminal": 161.0
+  },
+  "hourly_timeline": {
+    "2026-03-09 21": {
+      "Productivity": 990.0,
+      "Browsing (Uncategorized)": 90.0,
+      "Social": 5.0,
+      "Coding": 11.0,
+      "Neutral": 5.0
+    },
+    "2026-03-09 22": {
+      "Productivity": 2136.0,
+      "Neutral": 440.0,
+      "Browsing (Uncategorized)": 953.0,
+      "Coding": 20.0,
+      "Terminal": 161.0
+    },
+    "2026-03-09 23": {
+      "Neutral": 30.0,
+      "Productivity": 1546.0,
+      "Browsing (Uncategorized)": 45.0
+    }
+  },
+  "suspicious_flags": [
+    "\u26a0\ufe0f  Mouse jiggler suspected \u2014 robotic movement detected 11 times"
+  ],
+  "jiggler_detected": true
+}

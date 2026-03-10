@@ -1,0 +1,14 @@
+{
+  "date": "2025-01-07",
+  "productivity_score": 85.0,
+  "score_breakdown": {
+    "goal": 80.0
+  },
+  "productive_sec": 26000,
+  "category_breakdown": {
+    "Entertainment": 1500
+  },
+  "break_summary": {
+    "total_break_min": 60
+  }
+}

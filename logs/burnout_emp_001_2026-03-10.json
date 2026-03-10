@@ -1,0 +1,26 @@
+{
+  "emp_id": "emp_001",
+  "date": "2026-03-10",
+  "risk_score": 80,
+  "risk_level": "AT RISK",
+  "signals": {
+    "productivity_drop": 0,
+    "overtime": 20,
+    "break_skipping": 20,
+    "goal_drop": 20,
+    "entertainment_spike": 0,
+    "ai_bonus": 20
+  },
+  "observations": [
+    "Employee worked 10+ hours for 3 or more days",
+    "Break time dropped to under 30 mins/day for 3+ days",
+    "Goal completion score below 50% for 3+ days",
+    "AI Anomaly detected in today's behavior pattern against historical baseline"
+  ],
+  "recommended_actions": [
+    "Schedule a 1-on-1 conversation today",
+    "Ensure employee logs off on time; distribute workload if necessary",
+    "Ensure proper lunch and screen breaks are taken"
+  ],
+  "ai_layer_active": true
+}
