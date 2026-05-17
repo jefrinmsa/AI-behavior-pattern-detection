@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --parchment: #f5f0e8;
+  --parchment-dark: #ede8d0;
+  --ink: #1a1a2e;
+  --sepia: #3b2f2f;
+  --sepia-light: #5a4a3a;
+  --wax: #8b2500;
+  --stamp: #2c1810;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-parchment: #f5f0e8;
+  --color-parchment-dark: #ede8d0;
+  --color-ink: #1a1a2e;
+  --color-sepia: #3b2f2f;
+  --color-sepia-light: #5a4a3a;
+  --color-wax: #8b2500;
+  --color-stamp: #2c1810;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: 'Special Elite', 'Courier Prime', monospace;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(139, 37, 0, 0.2);
+  color: var(--ink);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--parchment-dark); }
+::-webkit-scrollbar-thumb { background: #c4b89a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a89878; }
+
+/* Paper crumple fold lines */
+.paper-bg {
+  background-color: var(--parchment);
+  background-image:
+    linear-gradient(0deg, transparent 32%, rgba(0,0,0,0.03) 32.3%, transparent 33%),
+    linear-gradient(0deg, transparent 65%, rgba(0,0,0,0.03) 65.3%, transparent 66%),
+    linear-gradient(90deg, transparent 49%, rgba(0,0,0,0.025) 49.5%, transparent 50.5%),
+    linear-gradient(135deg, transparent 40%, rgba(0,0,0,0.015) 40.2%, transparent 40.5%),
+    linear-gradient(45deg, transparent 60%, rgba(0,0,0,0.012) 60.2%, transparent 60.5%);
+}
+
+/* Typewriter cursor blink */
+@keyframes blink-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.typewriter-cursor::after {
+  content: '|';
+  animation: blink-cursor 0.8s infinite;
+  color: var(--sepia);
+  margin-left: 2px;
+}
+
+/* Drop cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: 'IM Fell English', serif;
+  font-size: 4rem;
+  line-height: 0.8;
+  margin-right: 8px;
+  margin-top: 4px;
+  color: var(--sepia);
+}
+
+/* Stamp press animation */
+@keyframes stamp-press {
+  0% { transform: scale(1) rotate(var(--rot, -3deg)); }
+  50% { transform: scale(0.92) rotate(var(--rot, -3deg)); box-shadow: 0 0 12px rgba(44,24,16,0.4); }
+  100% { transform: scale(1) rotate(var(--rot, -3deg)); }
+}
+
+/* Wax seal press */
+@keyframes seal-press {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.85); }
+  60% { transform: scale(0.85); box-shadow: 0 0 20px rgba(139,37,0,0.5); }
+  100% { transform: scale(1); }
+}
+.seal-press { animation: seal-press 0.5s ease-in-out; }
+
+/* Torn paper bottom edge for navbar */
+.torn-edge-bottom {
+  clip-path: polygon(
+    0 0, 100% 0, 100% 78%,
+    97% 85%, 94% 76%, 91% 88%, 87% 78%, 84% 86%,
+    80% 74%, 77% 84%, 73% 78%, 70% 90%, 66% 80%,
+    63% 86%, 59% 74%, 56% 84%, 52% 78%, 48% 88%,
+    45% 76%, 41% 86%, 38% 78%, 34% 84%, 31% 74%,
+    27% 88%, 24% 78%, 20% 86%, 17% 74%, 13% 84%,
+    10% 78%, 6% 88%, 3% 76%, 0 84%
+  );
+}
+
+/* Dog ear corner for project cards */
+.dog-ear {
+  position: relative;
+}
+.dog-ear::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--parchment) 50%, var(--parchment-dark) 50%);
+  box-shadow: -2px 2px 4px rgba(0,0,0,0.08);
+  z-index: 2;
+}
+
+/* Ink underline for active nav */
+.ink-underline {
+  position: relative;
+}
+.ink-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--sepia);
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+input, textarea {
+  font-family: 'Special Elite', monospace;
 }
